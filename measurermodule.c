@@ -2,10 +2,7 @@
 
 
 // Python Object 
-static PyObject *
-
-// define method 
-measurer_strlen(PyObject *self, PyObject *args)
+static PyObject* measurer_strlen(PyObject *self, PyObject *args)
 {
     char* str;
     int len;
@@ -15,12 +12,36 @@ measurer_strlen(PyObject *self, PyObject *args)
     return Py_BuildValue("i",len); // return Interger
 }
 
+static PyObject* measurer_division(PyObject *self, PyObject *args){
+    int quotient=0;
+    int dividend, divisor = 0;
+
+    if(!PyArg_ParseTuple(args,"ii",&dividend,&divisor)) return NULL;
+
+    
+    if(divisor){
+        quotient = dividend/divisor;
+    }else{
+        PyErr_SetString(PyExc_ZeroDivisionError, "divisor must not be zero");
+        return NULL;
+    }
+
+    return Py_BuildValue("i",quotient);
+}
+
 // define method name and description
 static PyMethodDef MeasurerMethods[] = {
-    {"strlen", // method name
-    measurer_strlen, // function pointer
-    METH_VARARGS, // Tuple arguments
-    "count a string length." // method description
+    {
+        "strlen", // method name
+        measurer_strlen, // function pointer
+        METH_VARARGS, // Tuple arguments
+        "count a string length." // method description
+    },
+    {
+        "division",
+        measurer_division,
+        METH_VARARGS,
+        "division function"
     },
     {NULL, NULL, 0 , NULL}
 };
@@ -35,7 +56,6 @@ static struct PyModuleDef measurermodule = {
 };
 
 
-PyMODINIT_FUNC
-PyInit_measurer(void){
+PyMODINIT_FUNC PyInit_measurer(void){
     return PyModule_Create(&measurermodule);
 }
