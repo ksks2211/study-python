@@ -1,8 +1,12 @@
 def fibonacci():
-    a, b = 0, 1
+    cur,prev = 1,0
     while True:
-        yield a
-        a, b = b, a + b
+        yield cur
+        cur, prev = cur+prev, cur
 
 
 f = fibonacci()
+
+
+for i in range(10):
+    print(next(f))
